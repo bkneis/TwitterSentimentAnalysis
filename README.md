@@ -1,6 +1,6 @@
-#### Politician Acceptance Analysis
+#### Twitter Sentiment Analysis
 
 ### Description
-This is an example java example using apache spark, apache openNLP and my own implmentation of a KNN (K Nearest Neighbour) model.
+This is a java example using apache spark and apache openNLP to train a model to classify tweets.
 
 
