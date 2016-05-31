@@ -1,20 +1,10 @@
-//import static spark.Spark.*;
-
-import java.util.ArrayList;
+import twitter4j.TwitterException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws TwitterException, InterruptedException {
 
-        POSTagger posTagger = new POSTagger();
+        TwitterHelper.collectData();
 
-        //@todo replace this with function to get a tweet, inside a loop
-        String tweet = "Most large cities in the US had morning and afternoon newspapers.";
-
-        ArrayList<String> tags = posTagger.getAdjectives(tweet);
-
-        for(int i = 0; i < tags.size(); i++){
-            System.out.println(tags.get(i));
-        }
     }
 }

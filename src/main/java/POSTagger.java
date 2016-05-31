@@ -4,19 +4,19 @@ import opennlp.tools.postag.POSTaggerME;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class POSTagger {
+public class POSTagger implements Serializable {
 
-    public static POSModel model = null;
-    public static POSTaggerME tagger = null;
-    public static String trainedPOSModelFile = "/home/arthur/en-pos-maxent.bin";
+    private static POSTaggerME tagger = null;
 
     //@todo, use something better than array list. Also use java 8 lambdas
-    public static ArrayList<String> getAdjectives(String sentence) {
+    public ArrayList<String> getAdjectives(String sentence) {
 
         String[] words = sentence.split(" ");
-        ArrayList<String> adjectives = new ArrayList<String>();
+        // @todo set the array list to a fixed size then .set each element with the index
+        ArrayList<String> adjectives = new ArrayList<>();
         String tags[] = tagger.tag(words);
         for(int i = 0; i < tags.length; i++) {
             if(tags[i].equals("JJ")) {
@@ -30,7 +30,9 @@ public class POSTagger {
 
         InputStream modelIn = null;
 
+        POSModel model = null;
         try {
+            String trainedPOSModelFile = "/home/arthur/en-pos-maxent.bin";
             modelIn = new FileInputStream(trainedPOSModelFile);
             model = new POSModel(modelIn);
 
@@ -49,6 +51,7 @@ public class POSTagger {
             }
         }
 
+        assert model != null;
         tagger = new POSTaggerME(model);
     }
 
