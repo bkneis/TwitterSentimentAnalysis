@@ -15,6 +15,7 @@ public class TwitterHelper {
         SparkConf conf = new SparkConf()
                 .setMaster("spark://marvin:7077")
                 .setAppName("Collect Twitter Data");
+
         JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(1));
 
         POSTagger posTagger = new POSTagger();                                  // Create the POS tagger to pass to the workers
@@ -28,7 +29,6 @@ public class TwitterHelper {
                 .map(tweet -> tweet.getText());
                 //.flatMap(tweet -> posTagger.getAdjectives(tweet.getText()));  // Filter out only the adjectives in the tweet
 
-        //adjectives.print();                                                   // Print the adjectives
         adjectives.foreachRDD((Function2<JavaRDD<String>, Time, Void>) (stringJavaRDD, time) -> {
             stringJavaRDD.saveAsTextFile("/tmp/dump/test.txt");
             return null;
