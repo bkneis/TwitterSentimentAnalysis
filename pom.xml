@@ -42,47 +42,82 @@
         </plugins>
     </build>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <geotools.version>16-SNAPSHOT</geotools.version> <!-- 14.3 -->
+        <spark.version>1.6.1</spark.version>
+        <cassandra.version>1.6.0</cassandra.version>
+        <opennlp.version>1.6.1-SNAPSHOT</opennlp.version>
+        <junit.version>3.8.1</junit.version>
+        <mockito.version>1.10.19</mockito.version>
+        <influxdbcon.version>1.4.0.10.0.4.1</influxdbcon.version>
+        <influxdb.version>2.2</influxdb.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.10</artifactId>
-            <version>1.6.1</version>
+            <version>${spark.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming_2.10</artifactId>
-            <version>1.6.1</version>
+            <version>${spark.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming-twitter_2.10</artifactId>
-            <version>1.6.1</version>
-            <!--<scope>provided</scope>-->
+            <version>${spark.version}</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.datastax.spark</groupId>
             <artifactId>spark-cassandra-connector_2.10</artifactId>
-            <version>1.6.0</version>
+            <version>${cassandra.version}</version>
+        </dependency>-->
+        <dependency>
+            <groupId>com.typesafe.netty</groupId>
+            <artifactId>netty-http-pipelining</artifactId>
+            <version>1.1.4</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.opennlp</groupId>
             <artifactId>opennlp-tools</artifactId>
-            <!--<version>1.6.0</version>-->
-            <version>1.6.1-SNAPSHOT</version>
+            <version>${opennlp.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-client</artifactId>
-            <version>2.7.2</version>
-            <scope>provided</scope>
+            <groupId>com.pygmalios</groupId>
+            <artifactId>reactiveinflux-spark_2.10</artifactId>
+            <version>${influxdbcon.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-shapefile</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-swing</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.influxdb</groupId>
+            <artifactId>influxdb-java</artifactId>
+            <version>${influxdb.version}</version>
         </dependency>
     </dependencies>
 
@@ -91,6 +126,42 @@
             <id>apache opennlp snapshot</id>
             <url>https://repository.apache.org/content/repositories/snapshots/</url>
         </repository>
+        <repository>
+            <id>maven2-repository.dev.java.net</id>
+            <name>Java.net repository</name>
+            <url>http://download.java.net/maven/2</url>
+        </repository>
+        <repository>
+            <id>osgeo</id>
+            <name>Open Source Geospatial Foundation Repository</name>
+            <url>http://download.osgeo.org/webdav/geotools/</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>boundless</id>
+            <name>Boundless Maven Repository</name>
+            <url>http://repo.boundlessgeo.com/main</url>
+        </repository>
+        <!--<repository>
+            <id>maven2-repository.dev.java.net</id>
+            <name>Java.net repository</name>
+            <url>http://download.java.net/maven/2</url>
+        </repository>
+        <repository>
+            <id>osgeo</id>
+            <name>Open Source Geospatial Foundation Repository</name>
+            <url>http://download.osgeo.org/webdav/geotools/</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>boundless</id>
+            <name>Boundless Maven Repository</name>
+            <url>http://repo.boundlessgeo.com/main</url>
+        </repository>-->
     </repositories>
 
 </project>
