@@ -1,4 +1,5 @@
 .idea/*
 target/*
 TwitterKNN.iml
-src/main/resources/twitter4j.properties
+src/main/resources/twitter4j.properties.idea/*
+target/
