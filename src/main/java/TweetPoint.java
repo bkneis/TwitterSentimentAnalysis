@@ -1,13 +1,17 @@
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.*;
-import java.util.ArrayList;
 
 import twitter4j.GeoLocation;
 import twitter4j.Status;
 
-public class TweetData implements Serializable {
+import com.pygmalios.reactiveinflux.jawa.*;
+import org.joda.time.DateTime;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class TweetPoint implements Serializable {
 
     private long id;
     private Date tweeted_at;
@@ -21,7 +25,6 @@ public class TweetData implements Serializable {
     private List<String> hashtags;
     private int sentiment;
     private String location;
-    private String lucene;
 
     public long getId() {
         return id;
@@ -65,14 +68,6 @@ public class TweetData implements Serializable {
 
     public int getsentiment() {
         return sentiment;
-    }
-
-    public String getLucene() {
-        return lucene;
-    }
-
-    public void setLucene(String lucene) {
-        this.lucene = lucene;
     }
 
     public void setId(long id) {
@@ -138,7 +133,7 @@ public class TweetData implements Serializable {
         List<String> links = new ArrayList<>();
         // Pattern for recognizing a URL, based off RFC 3986
         final Pattern urlPattern = Pattern.compile(
-                        "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
+                "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
                         + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
                         + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
                 Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
@@ -151,10 +146,7 @@ public class TweetData implements Serializable {
         return links;
     }
 
-    public TweetData() {
-    }
-
-    public TweetData(Status tweet, int sentiment, String location) {
+    public TweetPoint(Status tweet, int sentiment, String location) {
         this.id = tweet.getId();
         this.tweeted_at = tweet.getCreatedAt();
         this.favorited_count = tweet.getFavoriteCount();
@@ -172,20 +164,44 @@ public class TweetData implements Serializable {
         this.sentiment = sentiment;
     }
 
-    public TweetData(long id, Date tweeted_at, int favorited_count, double longitude, double latitude, long quote_id, int retweet_count,
-                     String text, List<String> links, List<String> hashtags, int sentiment, String location, String lucene) {
-        this.id = id;
-        this.tweeted_at = tweeted_at;
-        this.favorited_count = favorited_count;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.quote_id = quote_id;
-        this.retweet_count = retweet_count;
-        this.sentiment = sentiment;
-        this.text = text;
-        this.links = links;
-        this.hashtags = hashtags;
-        this.location = location;
-        this.lucene = lucene;
+    public Point dataPoint() {
+        Map<String, String> tags = new HashMap<>();
+        if(this.location != null) {
+            if (!this.location.equals("")) {
+                tags.put("location", this.location);
+            }
+        }
+        if(this.sentiment == 1) {
+            tags.put("sentiment", "positive");
+        }
+        else {
+            tags.put("sentiment", "negative");
+        }
+        //tags.put("sentiment", String(this.sentiment);
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("id", this.id);
+        //fields.put("tweeted_at", this.toString());
+        fields.put("favorited_count", this.favorited_count);
+        fields.put("longitude", this.longitude);
+        fields.put("latitude", this.latitude);
+        fields.put("quote_id", this.quote_id);
+        fields.put("retweet_count", this.retweet_count);
+        fields.put("text", this.text);
+        for(int i = 0; i < this.hashtags.size(); i++) {
+            fields.put(String.format("hashtag-%d", i), this.hashtags.get(i));
+        }
+        for(int i = 0; i < this.links.size(); i++) {
+            fields.put(String.format("links-%d", i), this.links.get(i));
+        }
+        //fields.put("hashtags", this.hashtags);
+        //fields.put("links", this.links);
+        fields.put("sentiment", this.sentiment);
+        return new JavaPoint(
+                this.getTweeted_at(),
+                "tweets",
+                tags,
+                fields
+        );
     }
+
 }

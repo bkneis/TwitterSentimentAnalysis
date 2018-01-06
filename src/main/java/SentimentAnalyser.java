@@ -1,7 +1,3 @@
-/**
- * Created by arthur on 31/05/16.
- */
-
 import java.io.*;
 
 import opennlp.tools.doccat.DoccatModel;
